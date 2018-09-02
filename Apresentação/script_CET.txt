@@ -1,0 +1,41 @@
+library(lubridate)
+library(ggplot2)
+library(scales)
+library(gridExtra)
+df2016 <- read.csv("C:/Users/aliss/Desktop/2016.csv", sep = ";")
+df2016 <- df2016[,12]
+df2016 <- as.character(df2016)
+df2016 <- substr(df2016, 1, 10)
+df2016 <- transform(df2016, as.Date(as.character(df2016), "%d%m%Y"))
+df2016$count <- 1
+test6 <- aggregate(df2016$count, by = list(df2016$X_data), sum)
+
+gg6 <-  ggplot(data = test6, aes(x = Group.1, y = x)) + 
+  geom_line(position = 'jitter',aes(group = 1, color = 'red')) +
+  xlab("Quantidade de atropelamentos") +
+  ylab("Dias") +
+  ggtitle("Quantidade de Atropelamentos Diários em 2016") +
+  theme(legend.position="none")
+
+gg6
+
+
+df2017 <- read.csv("C:/Users/aliss/Desktop/2017.csv", sep = ";")
+df2017 <- df2017[,12]
+df2017 <- as.character(df2017)
+df2017 <- substr(df2017, 1, 10)
+df2017 <- transform(df2017, as.Date(as.character(df2016), "%d%m%Y"))
+df2017$count <- 1
+test7 <- aggregate(df2017$count, by = list(df2017$X_data), sum)
+
+gg7 <-  ggplot(data = test7, aes(x = Group.1, y = x)) + 
+  geom_line(position = 'jitter',aes(group = 1, color = 'red')) +
+  xlab("Quantidade de atropelamentos") +
+  ylab("Dias") +
+  ggtitle("Quantidade de Atropelamentos Diários em 2017") +
+  theme(legend.position="none")
+
+gg7
+
+t <- wilcox.test(test6$x, test7$x, alternative="greater")
+t
